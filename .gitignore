@@ -1,0 +1,51 @@
+# --- Private / local notes (kept off the repo) ---
+CLAUDE.md
+.claude/
+
+# --- Python / FastAPI / ML ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Data / model artifacts (don't commit large/generated files) ---
+*.sqlite
+*.sqlite3
+*.db
+data/
+*.csv
+*.parquet
+*.npy
+*.npz
+*.pkl
+*.pt
+*.bin
+models/
+
+# --- Node / React ---
+node_modules/
+dist/
+build/
+.cache/
+coverage/
+*.local
+.vite/
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
