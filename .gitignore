@@ -1,6 +1,7 @@
 # --- Private / local notes (kept off the repo) ---
 CLAUDE.md
 .claude/
+./ingest/README.md
 
 # --- Python / FastAPI / ML ---
 __pycache__/

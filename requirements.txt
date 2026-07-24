@@ -1,0 +1,13 @@
+# Phase 1 — notebook prototype dependencies (ML service only)
+# Install into a virtualenv: see README / setup steps.
+
+pandas          # load + wrangle the catalog
+numpy           # vector math for taste vectors + similarity
+scikit-learn    # cosine_similarity, multi-hot encoding helpers
+jupyter         # notebook prototyping environment
+requests        # HTTP client for the Jikan ingestion pull
+pyarrow         # parquet read/write (preserves list columns like genres)
+
+# Added later, not needed yet:
+# fastapi, uvicorn   -> Step 3 (API)
+# sentence-transformers -> Phase 2 (embeddings)
