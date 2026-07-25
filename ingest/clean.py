@@ -1,14 +1,3 @@
-"""
-clean.py -- turn the raw Tenrai JSON pages into one tidy table.
-
-Reads every data/raw/page_*.json, pulls out the fields we need (schema is in
-ingest/README.md), drops junk rows, and writes data/anime.parquet plus a small
-CSV sample you can open to eyeball the result.
-
-Usage:
-    python ingest/clean.py
-"""
-
 import json
 from pathlib import Path
 
@@ -33,7 +22,7 @@ def names(items: list) -> list:
 
     return res
 
-# --- YOUR PART 2: extract one raw anime object into a flat row ---------------
+# extract useful categories from raw data
 def to_row(a: dict) -> dict:
 
     res = {}
@@ -51,7 +40,6 @@ def to_row(a: dict) -> dict:
     res["image_url"] = (a.get("images") or {}).get("jpg", {}).get("image_url")
     return res
 
-# --- Provided: load raw pages, assemble, clean, save -------------------------
 def main() -> None:
     rows = []
 
