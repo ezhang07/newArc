@@ -38,6 +38,9 @@ class Recommender:
         for anime in liked:
             if anime in self.title_to_row:
                 rows.append(self.matrix[self.title_to_row[anime]])
+
+        if not rows: # all titles were unknown to db, so just return nothing
+            return []
         
         taste_vector = np.mean(rows, axis=0)
 
