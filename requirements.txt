@@ -7,7 +7,9 @@ scikit-learn    # cosine_similarity, multi-hot encoding helpers
 jupyter         # notebook prototyping environment
 requests        # HTTP client for the Jikan ingestion pull
 pyarrow         # parquet read/write (preserves list columns like genres)
+fastapi         # web framework for the /recommend API (Step 3)
+uvicorn         # ASGI server that runs the FastAPI app
+pydantic        # request/response validation (pulled in by fastapi; pinned for clarity)
 
 # Added later, not needed yet:
-# fastapi, uvicorn   -> Step 3 (API)
 # sentence-transformers -> Phase 2 (embeddings)
