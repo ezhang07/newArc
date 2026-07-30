@@ -12,6 +12,8 @@ export type AnimeHit = {
 export type Recommendation = {
   title: string
   score: number
+  mal_id: number
+  image_url: string | null
 }
 
 // GET /anime?q=... -> typeahead search results
@@ -29,8 +31,16 @@ export async function searchAnime(q: string): Promise<AnimeHit[]> {
 //   - headers: { "Content-Type": "application/json" }   (tells the server we're sending JSON)
 //   - body: JSON.stringify({ liked, top_n: 12 })          (must match RecommendRequest)
 //   - check res.ok, then read res.json() and return data.recommendations
-export async function getRecommendations(
-  liked: string[],
-): Promise<Recommendation[]> {
-  throw new Error("not implemented yet")
+export async function getRecommendations(liked: string[]): Promise<Recommendation[]> {
+  const res = await fetch(`${API_BASE}/recommend`, 
+    { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ liked, top_n: 12})})
+  
+  if (!res.ok) {
+    throw new Error(`recommendations  failed (${res.status})`)
+  }
+
+  const data = await res.json()
+  
+  return data.recommendations
+  
 }

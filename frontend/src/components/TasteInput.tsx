@@ -42,6 +42,7 @@ export function TasteInput({ onRecommend }: Props) {
     setPicks((prev) => prev.filter((t) => t !== title))
   }
 
+  
   return (
     <div className="w-full max-w-xl">
       {/* Search field */}

@@ -1,10 +1,11 @@
 import { CoordinateField } from "@/components/CoordinateField"
 import { TasteInput } from "@/components/TasteInput"
+import { getRecommendations } from "./lib/api"
 
 function App() {
   // Stub for now — next step wires this to POST /recommend and renders results.
   function handleRecommend(liked: string[]) {
-    console.log("recommend for:", liked)
+    getRecommendations(liked);
   }
 
   return (
