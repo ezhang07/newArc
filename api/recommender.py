@@ -87,7 +87,14 @@ class Recommender:
             if key in seen:
                 continue
             seen.add(key)
-            results.append({"title": title, "score": float(scores[index])})
+            image_url = self.df["image_url"].iloc[index]
+            results.append({
+                "title": title,
+                "score": float(scores[index]),
+                "mal_id": int(self.df["mal_id"].iloc[index]),
+                # image_url can be NaN for a few entries; normalize that to None
+                "image_url": image_url if pd.notna(image_url) else None,
+            })
         return results
 
 

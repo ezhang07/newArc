@@ -1,11 +1,23 @@
 import { CoordinateField } from "@/components/CoordinateField"
 import { TasteInput } from "@/components/TasteInput"
-import { getRecommendations } from "./lib/api"
+import { getRecommendations, type Recommendation } from "./lib/api"
+import { useState } from "react";
+import { ResultsGrid } from "./components/ResultsGrid";
 
 function App() {
-  // Stub for now — next step wires this to POST /recommend and renders results.
-  function handleRecommend(liked: string[]) {
-    getRecommendations(liked);
+
+  const [results, setResults] = useState<Recommendation[]>([])
+  const [loading, setLoading] = useState(false)
+
+  async function handleRecommend(liked: string[]) {
+    setLoading(true);
+    try {
+      const recommendations = await getRecommendations(liked);
+      setResults(recommendations);
+    } finally {
+      setLoading(false)
+    }
+    
   }
 
   return (
@@ -46,6 +58,8 @@ function App() {
           <TasteInput onRecommend={handleRecommend} />
         </div>
       </main>
+
+      <ResultsGrid results={results} loading={loading} />
     </div>
   )
 }

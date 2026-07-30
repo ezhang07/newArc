@@ -11,6 +11,8 @@ class RecommendRequest(BaseModel):
 class Recommendation(BaseModel):
     title: str
     score: float
+    mal_id: int
+    image_url: str | None = None
 
 
 class RecommendResponse(BaseModel):
