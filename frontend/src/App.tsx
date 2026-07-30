@@ -1,121 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { CoordinateField } from "@/components/CoordinateField"
+import { TasteInput } from "@/components/TasteInput"
 
 function App() {
-  const [count, setCount] = useState(0)
+  // Stub for now — next step wires this to POST /recommend and renders results.
+  function handleRecommend(liked: string[]) {
+    console.log("recommend for:", liked)
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      {/* Signature backdrop: faint taste-space, masked so it fades into the ink */}
+      <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_42%,black,transparent)]">
+        <CoordinateField />
+      </div>
 
-      <div className="ticks"></div>
+      {/* Top bar */}
+      <header className="relative flex items-center justify-between px-6 py-5">
+        <span className="font-display text-lg font-semibold tracking-tight">
+          new<span className="text-signal">Arc</span>
+        </span>
+        <span className="font-mono text-xs text-muted-foreground">
+          v0.1 · 4,812 titles
+        </span>
+      </header>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {/* Hero — the tool is the hero */}
+      <main className="relative mx-auto flex min-h-[calc(100vh-72px)] max-w-3xl flex-col items-center justify-center px-6 pb-24 text-center">
+        <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Content-based recommender
+        </p>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
+          Name a few anime
+          <br />
+          you love.
+        </h1>
+
+        <p className="mt-5 max-w-md text-balance text-muted-foreground">
+          newArc plots your taste as a point in space and returns its nearest
+          neighbors from 4,812 titles.
+        </p>
+
+        <div className="mt-10 flex w-full justify-center">
+          <TasteInput onRecommend={handleRecommend} />
+        </div>
+      </main>
+    </div>
   )
 }
 
