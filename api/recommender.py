@@ -4,6 +4,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from api.schemas import AnimeHit
+
 from .vectorizer import Vectorizer
 
 # repo_root/data/anime.parquet  (this file lives in repo_root/api/)
@@ -57,6 +59,19 @@ class Recommender:
 
         return self._rank(order=order, scores=scores, liked=liked, top_n=top_n)
 
+    def search(self, q: str, limit: int = 10) -> list[dict]:
+        q = q.strip()
+        if not q:
+            return []
+        
+        matching = self.df[self.df["title"].str.contains(q, case=False, na=False)].head(limit) # gives list of all animes with that title
+
+        res = []
+        for i in range(len(matching)):
+            res.append({"title" : matching["title"].iloc[i],
+                        "mal_id" : int(matching["mal_id"].iloc[i]),
+                        "image_url" : matching["image_url"].iloc[i]})
+        return res
 
     def _rank(self, order, scores, liked, top_n) -> list[dict]:
         # Walk the ranked order, skip inputs + duplicate franchises, take top_n.

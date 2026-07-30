@@ -15,3 +15,13 @@ class Recommendation(BaseModel):
 
 class RecommendResponse(BaseModel):
     recommendations: list[Recommendation]
+
+
+class AnimeHit(BaseModel):
+    title: str
+    mal_id: int
+    image_url: str | None = None
+
+
+class SearchResponse(BaseModel):
+    results: list[AnimeHit]
