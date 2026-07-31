@@ -1,15 +1,12 @@
-# Phase 1 — notebook prototype dependencies (ML service only)
-# Install into a virtualenv: see README / setup steps.
+# Runtime dependencies — what the FastAPI server needs in production.
+# Render installs THIS file. Keep it minimal so deploy builds stay fast.
+#
+# Dev/notebook tooling (jupyter, scikit-learn, requests) lives in
+# requirements-dev.txt so it never bloats the production build.
 
-pandas          # load + wrangle the catalog
-numpy           # vector math for taste vectors + similarity
-scikit-learn    # cosine_similarity, multi-hot encoding helpers
-jupyter         # notebook prototyping environment
-requests        # HTTP client for the Jikan ingestion pull
-pyarrow         # parquet read/write (preserves list columns like genres)
-fastapi         # web framework for the /recommend API (Step 3)
+fastapi         # web framework for the /recommend + /anime API
 uvicorn         # ASGI server that runs the FastAPI app
-pydantic        # request/response validation (pulled in by fastapi; pinned for clarity)
-
-# Added later, not needed yet:
-# sentence-transformers -> Phase 2 (embeddings)
+pydantic        # request/response validation (also pulled in by fastapi)
+pandas          # load the catalog parquet + wrangle columns
+numpy           # vector math for taste vectors + cosine similarity
+pyarrow         # parquet reader (preserves list columns like genres/themes)

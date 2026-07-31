@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -20,11 +21,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="newArc recommender", lifespan=lifespan)
 
-# Let the React dev server (a different origin) call this API from the browser.
-# Regex allows any localhost port, since Vite picks a free one (5173, 5174, ...).
+# Let the browser frontend (a different origin) call this API.
+#   - http://localhost:5173 is the local Vite dev server (pinned in vite.config.ts)
+#   - FRONTEND_ORIGIN (set on Render) covers the deployed Vercel site
+# Only these exact origins are allowed.
+allow_origins = ["http://localhost:5173"]
+frontend_origin = os.getenv("FRONTEND_ORIGIN")
+if frontend_origin:
+    allow_origins.append(frontend_origin)
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://localhost:\d+",
+    allow_origins=allow_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

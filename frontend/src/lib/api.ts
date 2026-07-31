@@ -1,7 +1,9 @@
 // One place for all calls to the FastAPI backend.
 // The types mirror the Pydantic schemas in api/schemas.py.
 
-const API_BASE = "http://localhost:8000"
+// In production Vercel injects VITE_API_URL (the Render backend URL) at build time.
+// Locally that var is unset, so we fall back to the dev server on :8000.
+const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000"
 
 export type AnimeHit = {
   title: string

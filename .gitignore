@@ -25,7 +25,7 @@ env/
 *.sqlite
 *.sqlite3
 *.db
-data/
+data/*
 *.csv
 *.parquet
 *.npy
@@ -34,6 +34,10 @@ data/
 *.pt
 *.bin
 models/
+
+# ...but DO track the cleaned catalog — the server needs it to run.
+# (works because we ignore data/* contents, not the data/ dir itself)
+!data/anime.parquet
 
 # --- Node / React ---
 node_modules/

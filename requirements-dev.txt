@@ -1,0 +1,12 @@
+# Dev / notebook tooling — NOT needed to run the production server.
+# Install locally with:  pip install -r requirements-dev.txt
+# The line below also pulls in all the runtime deps, so this is the
+# only file you need for local development.
+-r requirements.txt
+
+scikit-learn    # cosine_similarity / encoding helpers used while prototyping
+jupyter         # notebook prototyping environment (notebooks/)
+requests        # HTTP client for the Tenrai ingestion pull (ingest/fetch.py)
+
+# Phase 2 (not needed yet):
+# sentence-transformers -> synopsis embeddings
