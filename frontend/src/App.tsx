@@ -22,14 +22,14 @@ function App() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
-      {/* Signature backdrop: faint taste-space, masked so it fades into the ink */}
-      <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_42%,black,transparent)]">
+      {/* Signature backdrop: the taste-space vector web, full-bleed to the edges */}
+      <div className="absolute inset-0">
         <CoordinateField />
       </div>
 
       {/* Top bar */}
       <header className="relative flex items-center justify-between px-6 py-5">
-        <span className="font-display text-lg font-semibold tracking-tight">
+        <span className="font-display text-xl font-bold tracking-tight">
           new<span className="text-signal">Arc</span>
         </span>
         <span className="font-mono text-xs text-muted-foreground">
@@ -43,10 +43,10 @@ function App() {
           Content-based recommender
         </p>
 
-        <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
-          Name a few anime
+        <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
+          Give us your favourite anime.
           <br />
-          you love.
+          We&apos;ll give you <span className="text-signal">your next</span>.
         </h1>
 
         <p className="mt-5 max-w-md text-balance text-muted-foreground">

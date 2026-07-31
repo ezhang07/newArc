@@ -7,7 +7,7 @@
 
 @theme inline {
     --font-heading: var(--font-display);
-    --font-display: 'Clash Display', 'General Sans', ui-sans-serif, sans-serif;
+    --font-display: 'Switzer', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-sans: 'General Sans', ui-sans-serif, system-ui, sans-serif;
     --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
     --color-signal: var(--signal);
