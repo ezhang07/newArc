@@ -49,9 +49,6 @@ function App() {
 
       {/* Hero — the tool is the hero */}
       <main className="relative mx-auto flex min-h-[calc(100vh-72px)] max-w-3xl flex-col items-center justify-center px-6 pb-24 text-center">
-        <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Content-based recommender
-        </p>
 
         <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
           Give us your favourite anime.
