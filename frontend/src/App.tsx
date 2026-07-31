@@ -1,13 +1,14 @@
 import { CoordinateField } from "@/components/CoordinateField"
 import { TasteInput } from "@/components/TasteInput"
 import { getRecommendations, type Recommendation } from "./lib/api"
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ResultsGrid } from "./components/ResultsGrid";
 
 function App() {
 
   const [results, setResults] = useState<Recommendation[]>([])
   const [loading, setLoading] = useState(false)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   async function handleRecommend(liked: string[]) {
     setLoading(true);
@@ -17,13 +18,22 @@ function App() {
     } finally {
       setLoading(false)
     }
-    
+
   }
+
+  // When a recommendation kicks off, glide down to the results so the user
+  // lands on the recs (they appear the moment loading flips true, as skeletons).
+  useEffect(() => {
+    if (loading) {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }, [loading])
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
-      {/* Signature backdrop: the taste-space vector web, full-bleed to the edges */}
-      <div className="absolute inset-0">
+      {/* Signature backdrop: the taste-space vector web, pinned to the viewport
+          (fixed, not absolute) so it never resizes/reflows when results appear. */}
+      <div className="fixed inset-0">
         <CoordinateField />
       </div>
 
@@ -59,7 +69,10 @@ function App() {
         </div>
       </main>
 
-      <ResultsGrid results={results} loading={loading} />
+      {/* scroll-mt leaves breathing room above the recs when we auto-scroll */}
+      <div ref={resultsRef} className="scroll-mt-16">
+        <ResultsGrid results={results} loading={loading} />
+      </div>
     </div>
   )
 }

@@ -107,12 +107,10 @@ export function CoordinateField() {
 
       const cx = w / 2
       const cy = h / 2
-      // Scale X by width and Y by height (anisotropic) so the cloud fills the
-      // whole viewport rectangle — otherwise a symmetric cube sits in a
-      // centered square and the left/right thirds of a wide screen stay empty.
-      // Overscan (>0.5) pushes the outermost points off-screen for a full bleed.
-      const scaleX = w * 0.62
-      const scaleY = h * 0.62
+      // Isotropic scale — SAME factor for X and Y so the web is never stretched.
+      // Keyed off the larger dimension with overscan (0.6) so points still reach
+      // every edge; the extras project off-screen for a full-bleed field.
+      const scale = Math.max(w, h) * 0.6
 
       // project every point: rotate (Y then X) -> perspective divide -> screen
       for (let i = 0; i < points.length; i++) {
@@ -124,8 +122,8 @@ export function CoordinateField() {
         const persp = FOCAL / (FOCAL + z2)
         // normalized depth 0 (far) .. 1 (near), for size + opacity
         const nd = (persp - 0.706) / (1.71 - 0.706)
-        proj[i].sx = cx + x1 * scaleX * persp
-        proj[i].sy = cy + y1 * scaleY * persp
+        proj[i].sx = cx + x1 * scale * persp
+        proj[i].sy = cy + y1 * scale * persp
         proj[i].nd = Math.max(0, Math.min(1, nd))
       }
 
