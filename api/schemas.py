@@ -6,6 +6,7 @@ class RecommendRequest(BaseModel):
     liked: list[str] = Field(..., min_length=1, description="Titles the user liked.")
     # How many recommendations to return. Defaults to 10 if the client omits it.
     top_n: int = Field(10, ge=1, le=50, description="How many recs to return.")
+    offset: int = Field(0, ge=0, description="How many recs to skip.")
 
 
 class Recommendation(BaseModel):

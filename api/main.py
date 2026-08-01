@@ -46,7 +46,7 @@ def health():
 @app.post("/recommend", response_model=RecommendResponse)
 def recommend(req: RecommendRequest):
     # PER-REQUEST path: only the cheap taste-vector + similarity work happens here.
-    recs = state["recommender"].recommend(req.liked, req.top_n)
+    recs = state["recommender"].recommend(req.liked, req.top_n, req.offset)
     return {"recommendations": recs}
 
 

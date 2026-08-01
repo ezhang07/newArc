@@ -34,7 +34,7 @@ class Recommender:
         # title -> row index, for turning a user's liked titles into matrix rows
         self.title_to_row = {t: i for i, t in enumerate(df["title"])}
 
-    def recommend(self, liked: list[str], top_n: int = 10) -> list[dict]:
+    def recommend(self, liked: list[str], top_n: int = 10, offset: int = 0) -> list[dict]:
         # PER-REQUEST path: build the taste vector, score every anime, rank.
         rows = []
         for anime in liked:
@@ -57,7 +57,7 @@ class Recommender:
 
         order = np.argsort(scores)[::-1]
 
-        return self._rank(order=order, scores=scores, liked=liked, top_n=top_n)
+        return self._rank(order=order, scores=scores, liked=liked, top_n=top_n, offset=offset)
 
     def search(self, q: str, limit: int = 10) -> list[dict]:
         q = q.strip()
@@ -73,10 +73,11 @@ class Recommender:
                         "image_url" : matching["image_url"].iloc[i]})
         return res
 
-    def _rank(self, order, scores, liked, top_n) -> list[dict]:
+    def _rank(self, order, scores, liked, top_n, offset) -> list[dict]:
         # Walk the ranked order, skip inputs + duplicate franchises, take top_n.
         seen = {franchise_key(t) for t in liked}
         results = []
+        skipped = 0
         for index in order:
             if len(results) >= top_n:
                 break
@@ -87,6 +88,9 @@ class Recommender:
             if key in seen:
                 continue
             seen.add(key)
+            if skipped < offset:
+                skipped += 1
+                continue
             image_url = self.df["image_url"].iloc[index]
             results.append({
                 "title": title,
