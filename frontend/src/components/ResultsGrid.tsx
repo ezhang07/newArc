@@ -1,11 +1,21 @@
+import { Button } from "@/components/ui/button"
 import type { Recommendation } from "@/lib/api"
 
 type Props = {
   results: Recommendation[]
   loading: boolean
+  onRefresh: () => void
+  refreshing: boolean
+  reachedEnd: boolean
 }
 
-export function ResultsGrid({ results, loading }: Props) {
+export function ResultsGrid({
+  results,
+  loading,
+  onRefresh,
+  refreshing,
+  reachedEnd,
+}: Props) {
   // Nothing requested yet, and not loading -> render nothing.
   if (!loading && results.length === 0) return null
 
@@ -26,7 +36,47 @@ export function ResultsGrid({ results, loading }: Props) {
             ))
           : results.map((rec) => <ResultCard key={rec.mal_id} rec={rec} />)}
       </div>
+
+      {/* Refresh: walk further down the same ranked list. Hidden during the
+          initial skeleton load; disabled once we've reached the end. */}
+      {!loading && results.length > 0 && (
+        <div className="mt-12 flex justify-center">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={onRefresh}
+            disabled={refreshing || reachedEnd}
+            className="text-sm font-medium"
+          >
+            <RefreshIcon spinning={refreshing} />
+            Show me more
+          </Button>
+        </div>
+      )}
     </section>
+  )
+}
+
+// lucide "refresh-cw" glyph, inlined so we don't pull in an icon dependency.
+// Spins while a refresh request is in flight.
+function RefreshIcon({ spinning }: { spinning: boolean }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={spinning ? "animate-spin" : ""}
+      aria-hidden="true"
+    >
+      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+      <path d="M21 3v5h-5" />
+      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+      <path d="M3 21v-5h5" />
+    </svg>
   )
 }
 

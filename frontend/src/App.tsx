@@ -1,6 +1,6 @@
 import { CoordinateField } from "@/components/CoordinateField"
 import { TasteInput } from "@/components/TasteInput"
-import { getRecommendations, type Recommendation } from "./lib/api"
+import { getRecommendations, getRefreshedRecs, type Recommendation } from "./lib/api"
 import { useState, useEffect, useRef } from "react";
 import { ResultsGrid } from "./components/ResultsGrid";
 
@@ -8,9 +8,23 @@ function App() {
 
   const [results, setResults] = useState<Recommendation[]>([])
   const [loading, setLoading] = useState(false)
+  const [loadingRefresh, setLoadingRefresh] = useState(false)
+  // true once refresh walks past the last available match, so the button can
+  // stop offering more and tell the user they've reached the end.
+  const [reachedEnd, setReachedEnd] = useState(false)
+
+
   const resultsRef = useRef<HTMLDivElement>(null)
 
+  const likedRef = useRef<string[]>([])
+  const offsetRef = useRef(0)
+
+
+
   async function handleRecommend(liked: string[]) {
+    likedRef.current = liked;
+    offsetRef.current = 0;
+    setReachedEnd(false);   // fresh search -> we're back at the top of the list
     setLoading(true);
     try {
       const recommendations = await getRecommendations(liked);
@@ -21,13 +35,35 @@ function App() {
 
   }
 
-  // When a recommendation kicks off, glide down to the results so the user
-  // lands on the recs (they appear the moment loading flips true, as skeletons).
+  async function handleRefresh() {
+    // Look one page further down, but don't commit the offset until we know
+    // there was actually something there.
+    const nextOffset = offsetRef.current + 12;
+    setLoadingRefresh(true);
+    try {
+      const newRecs = await getRefreshedRecs(likedRef.current, nextOffset)
+      if (newRecs.length > 0) {
+        setResults(newRecs);
+        offsetRef.current = nextOffset;   // only advance on a real page
+      } else {
+        setReachedEnd(true);              // walked off the end; keep last page shown
+      }
+    } finally {
+      setLoadingRefresh(false);
+    }
+  }
+
+  // Keep the results (and the "Show me more" button) in view.
   useEffect(() => {
     if (loading) {
+      // The moment a search kicks off, glide down to the skeletons (top-aligned).
       resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    } else if (results.length > 0) {
+      // Once the real recs + the button have rendered, re-align to the bottom
+      // so the button at the end of the grid is on screen too.
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
     }
-  }, [loading])
+  }, [loading, results])
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
@@ -68,7 +104,13 @@ function App() {
 
       {/* scroll-mt leaves breathing room above the recs when we auto-scroll */}
       <div ref={resultsRef} className="scroll-mt-16">
-        <ResultsGrid results={results} loading={loading} />
+        <ResultsGrid
+          results={results}
+          loading={loading}
+          onRefresh={handleRefresh}
+          refreshing={loadingRefresh}
+          reachedEnd={reachedEnd}
+        />
       </div>
     </div>
   )
