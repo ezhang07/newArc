@@ -35,7 +35,7 @@ export async function searchAnime(q: string): Promise<AnimeHit[]> {
 //   - check res.ok, then read res.json() and return data.recommendations
 export async function getRecommendations(liked: string[]): Promise<Recommendation[]> {
   const res = await fetch(`${API_BASE}/recommend`, 
-    { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ liked, top_n: 12})})
+    { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ liked, top_n: 12, offset: 0})})
   
   if (!res.ok) {
     throw new Error(`recommendations  failed (${res.status})`)
@@ -45,4 +45,17 @@ export async function getRecommendations(liked: string[]): Promise<Recommendatio
   
   return data.recommendations
   
+}
+
+// only diff is the offset param, which is passed to backend to get new recs
+export async function getRefreshedRecs(liked: string[], offset: number): Promise<Recommendation[]> {
+  const res = await fetch(`${API_BASE}/recommend`,
+    { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({liked, top_n: 12, offset})})
+
+    if (!res.ok) {
+      throw new Error(`refresh recommendations failed (${res.status})`)
+    }
+
+    const data = await res.json()
+    return data.recommendations
 }
