@@ -79,7 +79,7 @@ function App() {
           new<span className="text-signal">Arc</span>
         </span>
         <span className="font-mono text-xs text-muted-foreground">
-          v0.1 · 4,812 titles
+          v0.1 · 5,000 titles
         </span>
       </header>
 
@@ -92,15 +92,22 @@ function App() {
           We&apos;ll give you <span className="text-signal">your next</span>.
         </h1>
 
+        
         <p className="mt-5 max-w-md text-balance text-muted-foreground">
           newArc plots your taste as a point in space and returns its nearest
-          neighbors from 4,812 titles.
+          neighbors from 5,000 titles.
         </p>
+
 
         <div className="mt-10 flex w-full justify-center">
           <TasteInput onRecommend={handleRecommend} />
         </div>
+        
+        <p className="mt-4 font-mono text-xs text-destructive">
+          WARNING: on startup, backend requires a 50 second cold boot. search engine and recommend will not work until then.
+        </p>
       </main>
+
 
       {/* scroll-mt leaves breathing room above the recs when we auto-scroll */}
       <div ref={resultsRef} className="scroll-mt-16">
