@@ -1,0 +1,35 @@
+name: keep-warm
+
+# Pings the Render free-tier backend so it never idles long enough to spin
+# down (~15 min idle -> ~50s cold start on the next real visitor). Hitting
+# /health every 10 min keeps it awake for anyone viewing the portfolio demo.
+#
+# Trade-offs to know:
+#  - GitHub's scheduled cron is best-effort and can be delayed under load; 10
+#    min gives margin against Render's ~15 min sleep even if a run slips.
+#  - Scheduled workflows auto-disable after 60 days with NO repo activity. Any
+#    push (or a manual "Run workflow") resets that clock, so an actively-worked
+#    repo stays fine.
+#  - Runs 24/7 (every 10 min). We considered a daytime-only window, but to
+#    cover a US audience from ~5am Eastern through ~midnight Pacific the warm
+#    window spans ~23h UTC anyway -- the only dead hour would be ~3-5am ET /
+#    midnight-2am PT. Saving that ~1h/day isn't worth the DST + two-timezone
+#    cron complexity, so we just keep it warm around the clock.
+#  - 24/7 uses ~730 of Render's ~750 free instance-hours/mo. That fits this ONE
+#    free service; it leaves no room for a second one. If you add another free
+#    service later, narrow this cron to a daytime window then.
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes, 24/7
+  workflow_dispatch: {}       # allow manual runs from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend /health
+        run: |
+          curl --fail --silent --show-error --retry 3 --retry-delay 5 \
+            --max-time 90 \
+            https://newarc-api.onrender.com/health
