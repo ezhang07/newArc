@@ -78,9 +78,6 @@ function App() {
         <span className="font-display text-xl font-bold tracking-tight">
           new<span className="text-signal">Arc</span>
         </span>
-        <span className="font-mono text-xs text-muted-foreground">
-          v0.1 · 5,000 titles
-        </span>
       </header>
 
       {/* Hero — the tool is the hero */}
@@ -103,9 +100,6 @@ function App() {
           <TasteInput onRecommend={handleRecommend} />
         </div>
         
-        <p className="mt-4 font-mono text-xs text-destructive">
-          WARNING: on startup, backend requires a 50 second cold boot. search engine and recommend will not work until then.
-        </p>
       </main>
 
 
