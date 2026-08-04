@@ -37,9 +37,9 @@ app.add_middleware(
 )
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
-    """Cheap liveness check -- handy for deploy platforms and debugging."""
+    
     return {"status": "ok"}
 
 
