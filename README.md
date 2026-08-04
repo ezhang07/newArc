@@ -4,8 +4,6 @@
 
 🔗 **Live demo:** [new-arc-omega.vercel.app](https://new-arc-omega.vercel.app)
 
-> Heads up: the backend runs on Render's free tier, so the first request after a period of inactivity can take ~50s to cold-start. After that it's fast.
-
 ---
 
 ## How it works
@@ -41,6 +39,9 @@ The "Refresh" button doesn't re-run the model — it just walks further down the
 
 ```
 newArc/
+├── .github/
+│   └── workflows/
+│       └── keep-warm.yml   # cron pings the backend so Render's free tier doesn't cold-start
 ├── ingest/
 │   ├── fetch.py          # pull raw anime pages from the Tenrai API
 │   └── clean.py          # clean + filter -> data/anime.parquet (4,812 rows)
@@ -78,6 +79,14 @@ The frontend talks to `http://localhost:8000` by default; in production the API 
 python ingest/fetch.py             # pull raw pages into data/raw/
 python ingest/clean.py             # clean -> data/anime.parquet
 ```
+
+---
+
+## Deployment
+
+The frontend is deployed on **Vercel** and the FastAPI backend on **Render**'s free tier. Render spins a free service down after ~15 minutes of inactivity, so the next visitor would otherwise pay a ~50-second cold start while it boots back up.
+
+To keep the live demo responsive, a scheduled **GitHub Action** (`.github/workflows/keep-warm.yml`) pings the backend's `/health` endpoint every 10 minutes, so the service never idles long enough to sleep. It runs around the clock and stays within Render's free monthly instance-hour budget.
 
 ---
 
